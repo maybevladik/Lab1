@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Прогноз зменшення кількості навчальних закладів</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <canvas id="myChart" width="600" height="300"></canvas>
+
+  <script>
+    // Визначення періоду спостереження (наступні 10 років)
+    const years = Array.from({ length: 10 }, (_, i) => i + 2024); // [2024, 2025, 2026, ..., 2033]
+    const initialSchools = 500;
+    const decreaseRate = 0.02; // 2%
+
+    // Розрахунок кількості навчальних закладів для кожного року
+    const schoolsData = years.map(year => initialSchools * (1 - decreaseRate) ** (year - 2024));
+
+    // Конфігурація графіка
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const myChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: years.map(year => year.toString()),
+        datasets: [{
+          label: 'Кількість навчальних закладів',
+          data: schoolsData,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: {
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Кількість навчальних закладів'
+            },
+            ticks: {
+              beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Рік'
+            }
+          }]
+        }
+      }
+    });
+  </script>
+</body>
+</html>
